@@ -16,9 +16,17 @@ class MainFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val binding = FragmentMainBinding.inflate(inflater)
+
         binding.lifecycleOwner = this
 
         binding.viewModel = viewModel
+
+        val adapter = AsteroidAdapter()
+        binding.asteroidRecycler.adapter = adapter
+
+        // TODO: Use LiveData and observe this
+        adapter.submitList(viewModel.asteroids)
+
 
         setHasOptionsMenu(true)
 
