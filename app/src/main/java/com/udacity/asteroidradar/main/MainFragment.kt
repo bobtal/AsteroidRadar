@@ -2,6 +2,7 @@ package com.udacity.asteroidradar.main
 
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.udacity.asteroidradar.R
@@ -21,7 +22,9 @@ class MainFragment : Fragment() {
 
         binding.viewModel = viewModel
 
-        val adapter = AsteroidAdapter()
+        val adapter = AsteroidAdapter( AsteroidClickListener {
+            asteroidId -> Toast.makeText(context, "${asteroidId}", Toast.LENGTH_LONG).show()
+        })
         binding.asteroidRecycler.adapter = adapter
 
         // TODO: Use LiveData and observe this
