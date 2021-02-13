@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.databinding.FragmentMainBinding
 
@@ -23,13 +25,22 @@ class MainFragment : Fragment() {
         binding.viewModel = viewModel
 
         val adapter = AsteroidAdapter( AsteroidClickListener {
-            asteroidId -> Toast.makeText(context, "${asteroidId}", Toast.LENGTH_LONG).show()
+//            asteroidId -> Toast.makeText(context, "${asteroidId}", Toast.LENGTH_LONG).show()
+            asteroidId -> viewModel.onAsteroidClicked(asteroidId)
         })
         binding.asteroidRecycler.adapter = adapter
 
         // TODO: Use LiveData and observe this
         adapter.submitList(viewModel.asteroids)
 
+        viewModel.navigateToAsteroidDetails.observe(viewLifecycleOwner, Observer { asteroid ->
+            asteroid?.let {
+                this.findNavController().navigate(
+                        MainFragmentDirections.actionShowDetail(asteroid)
+                )
+                viewModel.onAsteroidDetailsNavigated()
+            }
+        })
 
         setHasOptionsMenu(true)
 
