@@ -40,9 +40,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             try {
                 _imageOfTheDay.value = NasaApi.retrofitService
                         .getImageOfTheDay("jobvxkJnhTNndxj7sL4AK1HuqxmZ3sYGUmeypXGM")
-                Log.d("MainViewModel", imageOfTheDay.toString())
             } catch (e: Exception) {
-                Log.d("MainViewModel", "problem: " + e.message ?: "Problem fetching data")
             }
         }
     }
