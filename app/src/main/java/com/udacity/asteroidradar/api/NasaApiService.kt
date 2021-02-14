@@ -2,11 +2,9 @@ package com.udacity.asteroidradar.network
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import com.udacity.asteroidradar.Asteroid
 import com.udacity.asteroidradar.Constants.BASE_URL
+import com.udacity.asteroidradar.ImageOfTheDay
 import com.udacity.asteroidradar.api.getNextSevenDaysFormattedDates
-import org.json.JSONObject
-import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
@@ -32,6 +30,9 @@ interface NasaApiService {
             @Query("end_date") endDate: String = getNextSevenDaysFormattedDates()[7],
             @Query("api_key") apiKey: String// = API_KEY
     ) : String
+
+    @GET("planetary/apod")
+    suspend fun getImageOfTheDay(@Query("api_key") apiKey: String) : ImageOfTheDay
 }
 
 object NasaApi {

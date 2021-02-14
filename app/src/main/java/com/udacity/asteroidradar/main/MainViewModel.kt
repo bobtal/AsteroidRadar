@@ -6,14 +6,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.udacity.asteroidradar.Asteroid
+import com.udacity.asteroidradar.ImageOfTheDay
 import com.udacity.asteroidradar.api.parseAsteroidsJsonResult
 import com.udacity.asteroidradar.network.NasaApi
 import kotlinx.coroutines.launch
 import org.json.JSONObject
-import retrofit2.Call
-import retrofit2.Response
 import java.lang.Exception
-import javax.security.auth.callback.Callback
 
 class MainViewModel : ViewModel() {
 
@@ -25,36 +23,40 @@ class MainViewModel : ViewModel() {
     val asteroidList : LiveData<List<Asteroid>>
         get() = _asteroidList
 
-    var asteroids = listOf(
-            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, false),
-            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
-            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, false),
-            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, false),
-            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, false),
-            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, false),
-            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
-            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
-            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, false),
-            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
-            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
-            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
-            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, false),
-            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
-            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
-            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
-            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
-            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
-            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, false),
-            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
-            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
-            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, false),
-            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
-            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
-            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
-            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
-            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
+    private val _imageOfTheDay = MutableLiveData<ImageOfTheDay>()
+    val imageOfTheDay : LiveData<ImageOfTheDay>
+        get() = _imageOfTheDay
 
-    )
+//    var asteroids = listOf(
+//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, false),
+//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
+//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, false),
+//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, false),
+//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, false),
+//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, false),
+//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
+//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
+//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, false),
+//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
+//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
+//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
+//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, false),
+//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
+//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
+//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
+//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
+//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
+//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, false),
+//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
+//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
+//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, false),
+//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
+//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
+//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
+//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
+//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
+//
+//    )
 
     private val _navigateToAsteroidDetails = MutableLiveData<Asteroid?>()
     val navigateToAsteroidDetails : LiveData<Asteroid?>
@@ -62,6 +64,19 @@ class MainViewModel : ViewModel() {
 
     init {
         getAsteroids()
+        getImageOfTheDay()
+    }
+
+    private fun getImageOfTheDay() {
+        viewModelScope.launch {
+            try {
+                _imageOfTheDay.value = NasaApi.retrofitService
+                        .getImageOfTheDay("jobvxkJnhTNndxj7sL4AK1HuqxmZ3sYGUmeypXGM")
+                Log.d("MainViewModel", imageOfTheDay.toString())
+            } catch (e: Exception) {
+                Log.d("MainViewModel", "problem: " + e.message ?: "Problem fetching data")
+            }
+        }
     }
 
     fun onAsteroidClicked(asteroid: Asteroid) {
