@@ -11,7 +11,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-private const val API_KEY = "DEMO_KEY"
+private const val API_KEY = "jobvxkJnhTNndxj7sL4AK1HuqxmZ3sYGUmeypXGM"
 
 private val moshi = Moshi.Builder()
         .add(KotlinJsonAdapterFactory())
@@ -28,7 +28,7 @@ interface NasaApiService {
     suspend fun getAsteroids(
             @Query("start_date") startDate: String = getNextSevenDaysFormattedDates()[0],
             @Query("end_date") endDate: String = getNextSevenDaysFormattedDates()[7],
-            @Query("api_key") apiKey: String// = API_KEY
+            @Query("api_key") apiKey: String = API_KEY
     ) : String
 
     @GET("planetary/apod")

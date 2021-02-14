@@ -1,29 +1,19 @@
 package com.udacity.asteroidradar.main
 
+import android.app.Application
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.udacity.asteroidradar.Asteroid
 import com.udacity.asteroidradar.ImageOfTheDay
 import com.udacity.asteroidradar.api.parseAsteroidsJsonResult
+import com.udacity.asteroidradar.database.AsteroidDatabase.Companion.getInstance
 import com.udacity.asteroidradar.network.NasaApi
+import com.udacity.asteroidradar.repository.AsteroidRepository
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.lang.Exception
 
-enum class NasaApiStatus { LOADING, ERROR, DONE }
-
-class MainViewModel : ViewModel() {
-
-    private val _status = MutableLiveData<NasaApiStatus>()
-    val status : LiveData<NasaApiStatus>
-        get() = _status
-
-    private val _asteroidList = MutableLiveData<List<Asteroid>>()
-    val asteroidList : LiveData<List<Asteroid>>
-        get() = _asteroidList
+class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _imageOfTheDay = MutableLiveData<ImageOfTheDay>()
     val imageOfTheDay : LiveData<ImageOfTheDay>
@@ -33,23 +23,16 @@ class MainViewModel : ViewModel() {
     val navigateToAsteroidDetails : LiveData<Asteroid?>
         get() = _navigateToAsteroidDetails
 
-    init {
-        getAsteroids()
-        getImageOfTheDay()
-    }
+    private val database = getInstance(application)
+    private val asteroidRepository = AsteroidRepository(database)
 
-    private fun getAsteroids()  {
+    val asteroidList = asteroidRepository.asteroids
+
+    init {
         viewModelScope.launch {
-            _status.value = NasaApiStatus.LOADING
-            try {
-                val result = parseAsteroidsJsonResult(JSONObject(NasaApi.retrofitService.getAsteroids(apiKey = "jobvxkJnhTNndxj7sL4AK1HuqxmZ3sYGUmeypXGM")))
-                _asteroidList.value = result
-                _status.value = NasaApiStatus.DONE
-            } catch (e: Exception) {
-                Log.d("MainViewModel", "problem: " + e.message ?: "Problem fetching data")
-                _status.value = NasaApiStatus.ERROR
-            }
+            asteroidRepository.refreshAsteroids()
         }
+        getImageOfTheDay()
     }
 
     private fun getImageOfTheDay() {
