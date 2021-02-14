@@ -44,14 +44,6 @@ class MainFragment : Fragment() {
             }
         })
 
-        viewModel.imageOfTheDay.observe(viewLifecycleOwner, Observer { imageOfTheDay ->
-            if (imageOfTheDay.url.isNotEmpty() && imageOfTheDay.mediaType.equals("image")) {
-                Picasso.with(context).load(imageOfTheDay.url).into(binding.activityMainImageOfTheDay)
-                binding.imageOfTheDayTitleText.text = imageOfTheDay.title
-                binding.activityMainImageOfTheDay.contentDescription = imageOfTheDay.title
-            }
-        })
-
         setHasOptionsMenu(true)
 
         return binding.root
