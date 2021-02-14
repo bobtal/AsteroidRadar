@@ -15,10 +15,6 @@ import java.lang.Exception
 
 class MainViewModel : ViewModel() {
 
-    private val _response = MutableLiveData<String>()
-    val response : LiveData<String>
-        get() = _response
-
     private val _asteroidList = MutableLiveData<List<Asteroid>>()
     val asteroidList : LiveData<List<Asteroid>>
         get() = _asteroidList
@@ -26,37 +22,6 @@ class MainViewModel : ViewModel() {
     private val _imageOfTheDay = MutableLiveData<ImageOfTheDay>()
     val imageOfTheDay : LiveData<ImageOfTheDay>
         get() = _imageOfTheDay
-
-//    var asteroids = listOf(
-//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, false),
-//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
-//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, false),
-//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, false),
-//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, false),
-//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, false),
-//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
-//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
-//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, false),
-//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
-//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
-//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
-//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, false),
-//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
-//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
-//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
-//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
-//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
-//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, false),
-//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
-//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
-//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, false),
-//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
-//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
-//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
-//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
-//            Asteroid(123L, "testOne", "123456", 123.0, 123.0, 123.0, 123.0, true),
-//
-//    )
 
     private val _navigateToAsteroidDetails = MutableLiveData<Asteroid?>()
     val navigateToAsteroidDetails : LiveData<Asteroid?>
