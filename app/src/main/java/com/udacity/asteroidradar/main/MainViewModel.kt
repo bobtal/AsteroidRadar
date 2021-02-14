@@ -13,7 +13,13 @@ import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.lang.Exception
 
+enum class NasaApiStatus { LOADING, ERROR, DONE }
+
 class MainViewModel : ViewModel() {
+
+    private val _status = MutableLiveData<NasaApiStatus>()
+    val status : LiveData<NasaApiStatus>
+        get() = _status
 
     private val _asteroidList = MutableLiveData<List<Asteroid>>()
     val asteroidList : LiveData<List<Asteroid>>
@@ -30,6 +36,20 @@ class MainViewModel : ViewModel() {
     init {
         getAsteroids()
         getImageOfTheDay()
+    }
+
+    private fun getAsteroids()  {
+        viewModelScope.launch {
+            _status.value = NasaApiStatus.LOADING
+            try {
+                val result = parseAsteroidsJsonResult(JSONObject(NasaApi.retrofitService.getAsteroids(apiKey = "jobvxkJnhTNndxj7sL4AK1HuqxmZ3sYGUmeypXGM")))
+                _asteroidList.value = result
+                _status.value = NasaApiStatus.DONE
+            } catch (e: Exception) {
+                Log.d("MainViewModel", "problem: " + e.message ?: "Problem fetching data")
+                _status.value = NasaApiStatus.ERROR
+            }
+        }
     }
 
     private fun getImageOfTheDay() {
@@ -50,17 +70,5 @@ class MainViewModel : ViewModel() {
 
     fun onAsteroidDetailsNavigated() {
         _navigateToAsteroidDetails.value = null
-    }
-
-    private fun getAsteroids()  {
-        viewModelScope.launch {
-            try {
-                val result = parseAsteroidsJsonResult(JSONObject(NasaApi.retrofitService.getAsteroids(apiKey = "jobvxkJnhTNndxj7sL4AK1HuqxmZ3sYGUmeypXGM")))
-                _asteroidList.value = result
-                Log.d("MainViewModel", "Yay, data fetched!")
-            } catch (e: Exception) {
-                Log.d("MainViewModel", "problem: " + e.message ?: "Problem fetching data")
-            }
-        }
     }
 }

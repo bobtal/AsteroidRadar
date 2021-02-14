@@ -1,9 +1,12 @@
 package com.udacity.asteroidradar
 
+import android.view.View
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.squareup.picasso.Picasso
+import com.udacity.asteroidradar.main.NasaApiStatus
 
 @BindingAdapter("statusIcon")
 fun bindAsteroidStatusImage(imageView: ImageView, isHazardous: Boolean) {
@@ -45,5 +48,14 @@ fun bindTextViewToDisplayVelocity(textView: TextView, number: Double) {
 fun bindImage(imageView: ImageView, imageUrl: String?) {
     imageUrl?.let {
         Picasso.with(imageView.context).load(imageUrl).into(imageView)
+    }
+}
+
+@BindingAdapter("nasaApiStatus")
+fun bindStatus(progressBar: ProgressBar, status: NasaApiStatus) {
+    when (status) {
+        NasaApiStatus.LOADING -> progressBar.visibility = View.VISIBLE
+        NasaApiStatus.ERROR -> progressBar.visibility = View.VISIBLE
+        NasaApiStatus.DONE -> progressBar.visibility = View.GONE
     }
 }
