@@ -2,13 +2,18 @@ package com.udacity.asteroidradar.network
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import com.udacity.asteroidradar.Asteroid
+import com.udacity.asteroidradar.Constants.BASE_URL
+import com.udacity.asteroidradar.api.getNextSevenDaysFormattedDates
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Query
 
-private const val BASE_URL = "https://api.nasa.gov/neo/rest/v1/"
+private const val API_KEY = "DEMO_KEY"
 
 private val moshi = Moshi.Builder()
         .add(KotlinJsonAdapterFactory())
@@ -21,9 +26,12 @@ private val retrofit = Retrofit.Builder()
         .build()
 
 interface NasaApiService {
-    @GET("feed")
-    fun getAsteroids():
-            Call<String>
+    @GET("neo/rest/v1/feed")
+    suspend fun getAsteroids(
+            @Query("start_date") startDate: String = getNextSevenDaysFormattedDates()[0],
+            @Query("end_date") endDate: String = getNextSevenDaysFormattedDates()[7],
+            @Query("api_key") apiKey: String// = API_KEY
+    ) : String
 }
 
 object NasaApi {

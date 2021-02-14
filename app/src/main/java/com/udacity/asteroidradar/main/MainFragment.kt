@@ -33,6 +33,10 @@ class MainFragment : Fragment() {
         // TODO: Use LiveData and observe this
         adapter.submitList(viewModel.asteroids)
 
+        viewModel.asteroidList.observe(viewLifecycleOwner, Observer { updatedAsteroidList ->
+            adapter.submitList(updatedAsteroidList)
+        })
+
         viewModel.navigateToAsteroidDetails.observe(viewLifecycleOwner, Observer { asteroid ->
             asteroid?.let {
                 this.findNavController().navigate(
